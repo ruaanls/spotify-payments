@@ -27,9 +27,9 @@ public class PagamentoJpa
     @Column(name = "chave_idempotencia", nullable = false, unique = true, length = 36)
     private String chaveIdempotencia;
 
-    // O ID que o Mercado Pago gera (Essencial para o Webhook/Retorno)
     @Column(name = "mercado_pago_id", unique = true)
     private Long mercadoPagoId;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assinatura_id", nullable = false)
@@ -50,8 +50,11 @@ public class PagamentoJpa
     private String ticketUrl;
 
     @Column(name = "criado_em", nullable = false)
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 
-    @Column(name = "pago_em")
-    private LocalDateTime pagoEm;
+
+    @PrePersist
+    private void prePersist() {
+        this.criadoEm = LocalDateTime.now();
+    }
 }

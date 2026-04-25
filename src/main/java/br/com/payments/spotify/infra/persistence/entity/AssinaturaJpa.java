@@ -17,17 +17,11 @@ public class AssinaturaJpa
     private Long id;
 
     @Column(name = "usuario_id", nullable = false)
-    private Long usuarioId;
+    private String usuarioId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plano_id", nullable = false)
     private PlanosJpa plano;
-
-    @Column(name = "data_inicio")
-    private LocalDateTime dataInicio;
-
-    @Column(name = "data_fim")
-    private LocalDateTime dataFim;
 
     @Column(nullable = false)
     private boolean ativo = false;

@@ -19,6 +19,6 @@ public class PlanosJpa
     @Column(nullable = false, length = 50)
     private String nome; // "PREMIUM_MENSAL"
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal preco; // 25.00
+    @Column(nullable = false)
+    private Double preco; // 25.00
 }
