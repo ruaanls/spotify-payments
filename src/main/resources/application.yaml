@@ -27,8 +27,3 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect  # ← sem o "8", esse é o correto no Hibernate 6
         format_sql: true
-
-  session:
-    store-type: jdbc
-    jdbc:
-      initialize-schema: always

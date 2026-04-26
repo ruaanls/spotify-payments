@@ -39,7 +39,7 @@ public class PagamentoJpa
     private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false,  columnDefinition = "VARCHAR(20)")
     private StatusPagamento status; // PENDENTE, APROVADO, RECUSADO, CANCELADO
 
     // Dados para o cliente conseguir pagar se sair da tela

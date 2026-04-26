@@ -3,9 +3,10 @@ package br.com.payments.spotify.infra.persistence.adapter;
 import br.com.payments.spotify.domain.repository.PaymentsRepoServiceImpl;
 import br.com.payments.spotify.infra.persistence.entity.PagamentoJpa;
 import br.com.payments.spotify.infra.persistence.repository.PaymentsRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
+@Repository
 public class PaymentsRepositoryAdapter implements PaymentsRepoServiceImpl
 {
 

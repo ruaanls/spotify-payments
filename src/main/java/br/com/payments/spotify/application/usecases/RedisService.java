@@ -29,6 +29,12 @@ public class RedisService implements RedisServiceImpl
         }
     }
 
+    @Override
+    public void saveTokenRedis(String id, String value, String type) {
+        String key = buildKey(id, type);
+        redisTemplate.opsForValue().set(key, value, TOKEN_TTL);
+    }
+
     private String buildKey(String id, String type)
     {
         return type+":" + id;
