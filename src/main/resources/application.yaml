@@ -1,4 +1,8 @@
 spring:
+  api:
+    v1:
+      mercadopago-access-token: TEST-3281060620233880-042716-881b28d0c84a779e6744b2e61d423964-2257883507
+      mercadopago-notification-url: https://curry-crushable-subdivide.ngrok-free.dev/payments/callback
   application:
     name: ms-pagamentos
 

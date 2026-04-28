@@ -1,33 +1,47 @@
 package br.com.payments.spotify.infra.web.controller;
 
-import br.com.payments.spotify.application.dto.CallbackRequestDTO;
-import br.com.payments.spotify.application.dto.EventPaymentDTO;
 import br.com.payments.spotify.application.dto.novos.CallbackNotificationDTO;
-import br.com.payments.spotify.application.dto.novos.PagamentoRequestDTO;
-import br.com.payments.spotify.application.dto.novos.PagamentoResponseDTO;
+import br.com.payments.spotify.application.dto.video.CreatePreferenceResponseDTO;
+import br.com.payments.spotify.application.dto.video.CreateReferenceRequestDTO;
 import br.com.payments.spotify.application.service.PremiumServiceImpl;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payments")
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentController
 {
     private final PremiumServiceImpl premiumService;
 
+
+
     @PostMapping()
-    public ResponseEntity<PagamentoResponseDTO> pedidoPix (@RequestBody PagamentoRequestDTO pagamentoRequestDTO) throws MPException, MPApiException {
-        return new ResponseEntity<>(this.premiumService.pedidoPix(pagamentoRequestDTO.getUsuarioId()), HttpStatus.CREATED);
+    public ResponseEntity<CreatePreferenceResponseDTO> createPreference(@RequestBody CreateReferenceRequestDTO request)
+    {
+        try{
+            CreatePreferenceResponseDTO fullResponse = premiumService.createPreference(request);
+            CreatePreferenceResponseDTO responseDTO = new CreatePreferenceResponseDTO(
+                    fullResponse.getPreferenceId(), fullResponse.getRedirectUrl());
+            return ResponseEntity.ok(responseDTO);
+        }
+        catch(Exception e)
+        {
+            log.error("Error creating payment preference for userId {}: {}", request.getUserId(), e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(null);
+        }
     }
+
 
     @PostMapping("/callback")
     public ResponseEntity callback (@RequestBody CallbackNotificationDTO callbackRequestDTO) throws MPException, MPApiException {
-        this.premiumService.callbackPayment(callbackRequestDTO);
+         this.premiumService.processPaymentNotificiation(callbackRequestDTO);
         return ResponseEntity.ok().build();
     }
 }

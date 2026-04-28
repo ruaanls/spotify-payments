@@ -16,7 +16,7 @@ public class CallbackNotificationDTO
     @JsonProperty("type")
     private String type;            // "payment" — tipo do evento
 
-    @JsonProperty("action")
+    @JsonProperty("act ion")
     private String action;          // "payment.created" ou "payment.updated"
 
     @JsonProperty("live_mode")
