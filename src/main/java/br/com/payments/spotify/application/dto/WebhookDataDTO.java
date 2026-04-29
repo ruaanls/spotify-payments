@@ -1,4 +1,4 @@
-package br.com.payments.spotify.application.dto.novos;
+package br.com.payments.spotify.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

@@ -1,18 +1,18 @@
 package br.com.payments.spotify.application.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class EventPaymentStatusDTO
+@Builder
+public class EventResponseDTO
 {
     private String event;
-    private Long id_payment;
     private String status;
-    private Double valor;
+    private String payment_method;
+    private String username;
 }

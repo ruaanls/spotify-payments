@@ -1,4 +1,4 @@
-package br.com.payments.spotify.application.dto.video;
+package br.com.payments.spotify.application.dto;
 
 import lombok.*;
 
@@ -7,6 +7,5 @@ import lombok.*;
 @Data
 public class CreatePreferenceResponseDTO
 {
-    private String preferenceId;
     private String redirectUrl;
 }

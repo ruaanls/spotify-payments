@@ -1,4 +1,4 @@
-package br.com.payments.spotify.application.dto.novos;
+package br.com.payments.spotify.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -10,13 +10,13 @@ import lombok.*;
 @Builder
 public class CallbackNotificationDTO
 {
-    @JsonProperty("id")
+    @JsonProperty("user_id")
     private Long id;                // ID interno da notificação
 
     @JsonProperty("type")
     private String type;            // "payment" — tipo do evento
 
-    @JsonProperty("act ion")
+    @JsonProperty("action")
     private String action;          // "payment.created" ou "payment.updated"
 
     @JsonProperty("live_mode")
@@ -25,9 +25,9 @@ public class CallbackNotificationDTO
     @JsonProperty("data")
     private WebhookDataDTO data;
 
-    @JsonProperty("topic")
-    private String topic;
+    @JsonProperty("api_version")
+    private String api_version;
 
-    @JsonProperty("resource")
-    private String resource;
+    @JsonProperty("date_created")
+    private String date_created;
 }

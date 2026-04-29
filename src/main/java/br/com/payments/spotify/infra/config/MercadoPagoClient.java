@@ -1,11 +1,10 @@
 package br.com.payments.spotify.infra.config;
 
-import br.com.payments.spotify.application.dto.IdentificationDto;
-import br.com.payments.spotify.application.dto.PayerDTO;
-import br.com.payments.spotify.application.dto.video.CreatePreferenceResponseDTO;
-import br.com.payments.spotify.application.dto.video.CreateReferenceRequestDTO;
-import br.com.payments.spotify.application.dto.video.PaymentNotificationRequestDTO;
-import br.com.payments.spotify.application.dto.video.PaymentNotificationResponseDTO;
+import br.com.payments.spotify.application.dto.CreatePreferenceResponseDTO;
+import br.com.payments.spotify.application.dto.CreateReferenceRequestDTO;
+import br.com.payments.spotify.application.dto.EventResponseDTO;
+import br.com.payments.spotify.application.exception.PaymentData;
+import br.com.payments.spotify.application.exception.PaymentProcess;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.common.IdentificationRequest;
 import com.mercadopago.client.payment.PaymentClient;
@@ -14,15 +13,14 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
-import com.mercadopago.resources.preference.PreferenceItem;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 public class MercadoPagoClient
@@ -44,14 +42,13 @@ public class MercadoPagoClient
         try
         {
             PreferenceClient client = new PreferenceClient();
-            List<PreferenceItemRequest> items = input.getItens().stream()
-                    .map(itemCapturado -> PreferenceItemRequest.builder()
-                                .id(itemCapturado.getId())
-                                .title(itemCapturado.getTitle())
-                                .unitPrice(itemCapturado.getPrice())
-                                .quantity(1)
-                                .build())
-                    .toList();
+            List<PreferenceItemRequest> items = new ArrayList<>();
+            items.add(PreferenceItemRequest.builder()
+                    .id("1")
+                    .title("Spotify Analytics - Premium")
+                    .unitPrice(BigDecimal.valueOf(20.00))
+                    .quantity(1)
+                    .build());
             PreferencePayerRequest payer = PreferencePayerRequest.builder()
                     .name(input.getPayer().getFirst_name())
                     .identification(IdentificationRequest.builder()
@@ -75,45 +72,36 @@ public class MercadoPagoClient
                     .build();
 
             Preference preference = client.create(request);
-            return new CreatePreferenceResponseDTO(preference.getId(), preference.getInitPoint());
+            return new CreatePreferenceResponseDTO(preference.getInitPoint());
 
 
 
-        } catch (MPException e) {
-            throw new RuntimeException(e);
-        } catch (MPApiException e) {
-            throw new RuntimeException(e);
+        } catch (MPException | MPApiException e) {
+            throw new PaymentProcess();
         }
     }
 
 
-    public PaymentNotificationResponseDTO getPaymentDetails(String paymentId)
+    public void getPaymentDetails(String paymentId, String username)
     {
         try{
             PaymentClient client = new PaymentClient();
             Payment mpPayment = client.get(Long.valueOf(paymentId));
 
-            String status = mpPayment.getStatus();
-            String paymentMethod = mpPayment.getPaymentMethodId();
-            PayerDTO payer = null;
             if(mpPayment.getPayer() != null && mpPayment.getPayer().getIdentification() != null)
             {
-                payer = PayerDTO.builder()
-                        .first_name(mpPayment.getPayer().getFirstName())
-                        .identification(IdentificationDto.builder()
-                                .number(mpPayment.getPayer().getIdentification().getNumber())
-                                .type(mpPayment.getPayer().getIdentification().getType())
-                                .build())
+                EventResponseDTO.builder()
+                        .payment_method(mpPayment.getPaymentMethodId())
+                        .event("payment_status")
+                        .status(mpPayment.getStatus())
+                        .username(username)
                         .build();
+
+                //ENVIAR EVENTO
             }
 
-            return new PaymentNotificationResponseDTO(
-                    status,paymentMethod, payer
-            );
-        } catch (MPException e) {
-            throw new RuntimeException(e);
-        } catch (MPApiException e) {
-            throw new RuntimeException(e);
+        } catch (MPException | MPApiException e) {
+            throw new PaymentData();
         }
     }
 
