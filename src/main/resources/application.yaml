@@ -1,23 +1,11 @@
 spring:
-  api:
-    v1:
-      mercadopago-access-token: TEST-3281060620233880-042716-881b28d0c84a779e6744b2e61d423964-2257883507
-      mercadopago-notification-url: https://curry-crushable-subdivide.ngrok-free.dev/payments/callback
+  config:
+    import: "optional:aws-parameterstore:/config/myapp/"
+
   application:
     name: ms-pagamentos
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      ssl:
-        enabled: false
-      timeout: 5s
-
   datasource:
-    url: jdbc:mysql://db-spotify.cd6umyukudf3.sa-east-1.rds.amazonaws.com:3306/ms_pagamentos?useSSL=true&requireSSL=true&allowPublicKeyRetrieval=true
-    username: admin
-    password: '#Ruan1235'
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 30000
@@ -31,3 +19,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect  # ← sem o "8", esse é o correto no Hibernate 6
         format_sql: true
+
+cloud:
+  aws:
+    region:
+      static: sa-east-1
