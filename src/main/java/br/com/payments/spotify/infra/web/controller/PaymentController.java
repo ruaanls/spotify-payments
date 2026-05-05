@@ -3,7 +3,10 @@ package br.com.payments.spotify.infra.web.controller;
 import br.com.payments.spotify.application.dto.CallbackNotificationDTO;
 import br.com.payments.spotify.application.dto.CreatePreferenceResponseDTO;
 import br.com.payments.spotify.application.dto.CreateReferenceRequestDTO;
+import br.com.payments.spotify.application.dto.EventResponseDTO;
+import br.com.payments.spotify.application.service.EventServiceImpl;
 import br.com.payments.spotify.application.service.PremiumServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +21,7 @@ public class PaymentController
 {
     private final PremiumServiceImpl premiumService;
     private String username;
+    private final EventServiceImpl eventService;
 
 
     @PostMapping()
@@ -33,8 +37,12 @@ public class PaymentController
 
 
     @PostMapping("/callback")
-    public ResponseEntity callback (@RequestBody CallbackNotificationDTO callbackRequestDTO){
-         this.premiumService.processPaymentNotificiation(callbackRequestDTO, this.username);
+    public ResponseEntity callback (@RequestBody CallbackNotificationDTO callbackRequestDTO) throws JsonProcessingException {
+        EventResponseDTO eventResponseDTO = this.premiumService.processPaymentNotificiation(callbackRequestDTO, this.username);
+        if(eventResponseDTO != null)
+        {
+            this.eventService.publicarEvento(eventResponseDTO);
+        }
          this.username = null;
         return ResponseEntity.ok().build();
     }

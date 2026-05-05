@@ -67,8 +67,9 @@ public class MercadoPagoClient
                     .items(items)
                     .payer(payer)
                     .backUrls(backUrls)
+                    .notificationUrl("https://curry-crushable-subdivide.ngrok-free.dev/payments/callback")
                     .autoReturn("approved")
-                    .externalReference(UUID.randomUUID().toString())
+                    .externalReference(input.getUsername())
                     .build();
 
             Preference preference = client.create(request);
@@ -82,7 +83,7 @@ public class MercadoPagoClient
     }
 
 
-    public void getPaymentDetails(String paymentId, String username)
+    public EventResponseDTO getPaymentDetails(String paymentId, String username)
     {
         try{
             PaymentClient client = new PaymentClient();
@@ -90,15 +91,16 @@ public class MercadoPagoClient
 
             if(mpPayment.getPayer() != null && mpPayment.getPayer().getIdentification() != null)
             {
-                EventResponseDTO.builder()
+                return EventResponseDTO.builder()
                         .payment_method(mpPayment.getPaymentMethodId())
                         .event("payment_status")
                         .status(mpPayment.getStatus())
-                        .username(username)
+                        .username(mpPayment.getExternalReference())
                         .build();
 
                 //ENVIAR EVENTO
             }
+            return null;
 
         } catch (MPException | MPApiException e) {
             throw new PaymentData();
