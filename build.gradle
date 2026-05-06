@@ -28,7 +28,7 @@ dependencies {
 	implementation platform('software.amazon.awssdk:bom:2.21.0')
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'software.amazon.awssdk:rds'
 	implementation 'software.amazon.awssdk:auth'
 	implementation 'software.amazon.awssdk:regions'
