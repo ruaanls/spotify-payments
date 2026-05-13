@@ -20,7 +20,7 @@ public class ExceptionGlobalHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(PaymentData.class)
-    private ResponseEntity<ErrorClassException> paymentNotFound(PaymentProcess exception)
+    private ResponseEntity<ErrorClassException> paymentNotFound(PaymentData exception)
     {
         ErrorClassException Exception = new ErrorClassException(HttpStatus.NOT_FOUND,exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Exception);

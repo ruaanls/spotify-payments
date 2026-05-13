@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import io.awspring.cloud.sns.core.SnsTemplate;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
@@ -27,11 +28,7 @@ public class AwsConfig
     public SnsClient snsClient() {
         return SnsClient.builder()
                 .region(Region.of(region))
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(accessKey, secretKey)
-                        )
-                )
+                .credentialsProvider(DefaultCredentialsProvider.create())
                 .build();
     }
 
