@@ -43,7 +43,6 @@ public class PaymentController
         {
             this.eventService.publicarEvento(eventResponseDTO);
         }
-         this.username = null;
         return ResponseEntity.ok().build();
     }
 }

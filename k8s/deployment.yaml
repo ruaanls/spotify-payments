@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-deployment
+  labels:
+    app: payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      labels:
+        app: payments
+    spec:
+      serviceAccountName: app-service-account
+      containers:
+        - name: payments
+          image: 582983022531.dkr.ecr.sa-east-1.amazonaws.com/payments:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: SPRING_CLOUD_AWS_REGION_STATIC
+              value: "sa-east-1"
+            - name: AWS_REGION
+              value: "sa-east-1"
+            - name: AWS_DEFAULT_REGION
+              value: "sa-east-1"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-service
+spec:
+  selector:
+    app: payments
+  ports:
+    - port: 90
+      targetPort: 9090
+  type: ClusterIP
