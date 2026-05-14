@@ -35,7 +35,6 @@ public class PaymentController
 
     }
 
-
     @PostMapping("/callback")
     public ResponseEntity callback (@RequestBody CallbackNotificationDTO callbackRequestDTO) throws JsonProcessingException {
         EventResponseDTO eventResponseDTO = this.premiumService.processPaymentNotificiation(callbackRequestDTO, this.username);

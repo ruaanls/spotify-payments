@@ -6,9 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.awspring.cloud.sns.core.SnsTemplate;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 
@@ -37,9 +35,7 @@ public class AwsConfig
         var converter = new MappingJackson2MessageConverter();
         converter.setObjectMapper(objectMapper);
         converter.setSerializedPayloadClass(String.class);
-        // false = não exige header de content-type na mensagem
         converter.setStrictContentTypeMatch(false);
-
         var template = new SnsTemplate(snsClient);
         template.setMessageConverter(converter);
         return template;
