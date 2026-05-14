@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: app-monitor
+  namespace: monitoring # Onde o Prometheus está
+  labels:
+    release: prometheus # OBRIGATÓRIO: deve bater com o nome do seu Helm install
+spec:
+  selector:
+    matchLabels:
+      app: monitorado # Ele vai buscar os Services com essa label
+  namespaceSelector:
+    matchNames:
+      - default # Namespace onde seus MS estão
+  endpoints:
+    - port: http-metrics # O nome que demos no Service
+      path: /actuator/prometheus
+      interval: 15s
