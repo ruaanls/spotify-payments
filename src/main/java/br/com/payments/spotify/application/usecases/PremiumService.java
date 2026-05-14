@@ -1,6 +1,5 @@
 package br.com.payments.spotify.application.usecases;
 
-
 import br.com.payments.spotify.application.dto.CallbackNotificationDTO;
 import br.com.payments.spotify.application.dto.CreatePreferenceResponseDTO;
 import br.com.payments.spotify.application.dto.CreateReferenceRequestDTO;

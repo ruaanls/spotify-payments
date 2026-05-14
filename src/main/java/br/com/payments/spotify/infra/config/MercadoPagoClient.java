@@ -16,11 +16,10 @@ import com.mercadopago.resources.preference.Preference;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Component
 public class MercadoPagoClient
@@ -28,8 +27,6 @@ public class MercadoPagoClient
 
     @Value("${spring.api.v1.mercadopago-access-token}")
     private String accessToken;
-    @Value("${spring.api.v1.mercadopago-notification-url}")
-    private String notificationUrl;
 
     @PostConstruct
     public void init()
@@ -97,8 +94,6 @@ public class MercadoPagoClient
                         .status(mpPayment.getStatus())
                         .username(mpPayment.getExternalReference())
                         .build();
-
-                //ENVIAR EVENTO
             }
             return null;
 
